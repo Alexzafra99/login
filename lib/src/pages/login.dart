@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login/src/pages/entrada.dart';
 class Login extends StatefulWidget {
 
   @override
@@ -15,9 +16,10 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
+        automaticallyImplyLeading: false,
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           children: [
             TextField(
               decoration: InputDecoration(
@@ -52,14 +54,47 @@ class _LoginState extends State<Login> {
                 });         
               },
             ),
-            TextButton(
+            SizedBox(height:50),
+            ElevatedButton(
               onPressed: () {
-                
-              }, 
-              child: Text("Acceder")
+                if((_usuario==_password) && _usuario!=""){
+                  Navigator.push( context, MaterialPageRoute(
+                    builder: (context) => Entrada()),
+                  );
+                }
+                else{
+                  _mostrarError(context);
+                }
+              },
+              child: Text("Acceder",style: TextStyle(fontSize: 20)),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: StadiumBorder(),
+              )
             ),
           ],
       ),
     );
+  }
+
+  _mostrarError(BuildContext context){
+    showDialog(
+      context: context, 
+      barrierDismissible: true,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Error al iniciar sesión"),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Pista:\nPara acceder al sistema introduce el mismo texto en el campo Ususario y Contraseña"),
+              SizedBox(height: 20),
+              Icon(Icons.error_outline)
+            ],
+          ),
+        );
+      }, 
+    ); 
   }
 }
